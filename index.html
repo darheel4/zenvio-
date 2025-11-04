@@ -3936,103 +3936,12 @@ setInterval(checkScheduledChapters, 60000);
       </div>
     </div>
 
-    <!-- Banner promocional pequeño (estilo TikTok) -->
-    <div id="promo-banner" class="absolute bottom-24 left-4 right-4 bg-black/30 backdrop-blur-sm rounded-lg p-2 flex items-center cursor-pointer" onclick="expandPromoBanner()">
-      <div class="flex-shrink-0 mr-2">
-        <i class="fas fa-broadcast-tower" style="color: #00D6C9; font-size: 20px;"></i>
-      </div>
-      <div class="flex-grow">
-        <p class="text-white text-sm">Descubre funciones LIVE exclusivas</p>
-      </div>
-      <div class="flex-shrink-0">
-        <i class="fas fa-chevron-up text-white"></i>
-      </div>
-    </div>
-
-    <!-- Banner expandido -->
-    <div id="expanded-banner" class="fixed inset-x-0 bottom-0 h-1/2 bg-black/80 backdrop-blur-md z-60 rounded-t-xl transition-transform duration-300 transform translate-y-full">
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-[#00D6C9] text-xl font-bold">Funciones LIVE</h3>
-          <button onclick="closeExpandedBanner()" class="text-white">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-        <div class="grid grid-cols-2 gap-4 mb-6">
-          <div class="bg-white/10 p-3 rounded-lg">
-            <i class="fas fa-heart text-pink-500 text-2xl mb-2"></i>
-            <h4 class="text-white font-medium mb-1">Doble tap</h4>
-            <p class="text-gray-300 text-sm">Toca dos veces para enviar corazones</p>
-          </div>
-          <div class="bg-white/10 p-3 rounded-lg">
-            <i class="fas fa-gift text-[#00D6C9] text-2xl mb-2"></i>
-            <h4 class="text-white font-medium mb-1">Regalos</h4>
-            <p class="text-gray-300 text-sm">Envía regalos y sorprende al creador</p>
-          </div>
-          <div class="bg-white/10 p-3 rounded-lg">
-            <i class="fas fa-star text-yellow-500 text-2xl mb-2"></i>
-            <h4 class="text-white font-medium mb-1">Monetización</h4>
-            <p class="text-gray-300 text-sm">Gana por tus transmisiones</p>
-          </div>
-          <div class="bg-white/10 p-3 rounded-lg">
-            <i class="fas fa-users text-blue-500 text-2xl mb-2"></i>
-            <h4 class="text-white font-medium mb-1">Comunidad</h4>
-            <p class="text-gray-300 text-sm">Conecta con tus seguidores en vivo</p>
-          </div>
-        </div>
-        <!-- Animación moderna de hilos subiendo de forma infinita -->
-        <div id="animated-lines">
-          <div class="line" style="left: 10%; animation-delay: 0s;"></div>
-          <div class="line" style="left: 30%; animation-delay: 0.5s;"></div>
-          <div class="line" style="left: 50%; animation-delay: 1s;"></div>
-          <div class="line" style="left: 70%; animation-delay: 1.5s;"></div>
-          <div class="line" style="left: 90%; animation-delay: 2s;"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Contador de taps/corazones para el espectador -->
-    <div id="viewer-tapCount" class="absolute top-16 right-4 text-lg bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-[#00D6C9]">
-      0 ❤️
-    </div>
-
-    <!-- Video Element -->
-    <video id="live-remoteVideo" autoplay playsinline class="w-full h-full object-cover" ondblclick="handleDoubleTap(event)"></video>
-
-    <!-- Contenedor para corazones animados -->
-    <div id="hearts-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
-
-    <!-- Botones laterales estilo TikTok para espectador -->
-    <div class="side-buttons absolute bottom-24 right-4 flex flex-col items-center space-y-6">
-      <div class="side-button flex flex-col items-center">
-        <div class="icon-button bg-black/30 backdrop-blur-sm w-12 h-12 rounded-full flex items-center justify-center" id="heartButtonViewer" onclick="sendHeart()">
-          <img src="https://cdn-0.emojis.wiki/emoji-pics/twitter/green-heart-twitter.png" alt="Heart" style="width:24px; height:24px;">
-        </div>
-        <span id="likeCountLiveViewer" class="text-[#00D6C9] text-sm mt-1">0</span>
-      </div>
-      <div class="side-button flex flex-col items-center">
-        <div class="icon-button bg-black/30 backdrop-blur-sm w-12 h-12 rounded-full flex items-center justify-center" id="giftButtonViewer" onclick="document.getElementById('gift-drawer').classList.add('open');">
-          <img src="https://cdn-icons-png.flaticon.com/512/5899/5899678.png" alt="Gift" style="width:24px; height:24px;">
-        </div>
-        <span class="text-white text-sm mt-1">Regalo</span>
-      </div>
-      <div class="side-button flex flex-col items-center">
-        <div class="icon-button bg-black/30 backdrop-blur-sm w-12 h-12 rounded-full flex items-center justify-center" id="reportButtonViewer" onclick="window.location.href='report.html'">
-          <i class="fas fa-flag" style="color: #f44336; font-size:20px;"></i>
-        </div>
-        <span class="text-white text-sm mt-1">Reportar</span>
-      </div>
-    </div>
   </div>
 </div>
 
 
 
 
-
-
-<!-- INPUTS ocultos para video pregrabado y audio -->
-<input type="file" id="live-video-input" accept="video/*" class="hidden" onchange="handleLiveVideoUpload(event)">
 <input type="file" id="live-audio-es" accept="audio/*" class="hidden">
 <input type="file" id="live-audio-en" accept="audio/*" class="hidden">
 
