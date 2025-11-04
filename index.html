@@ -3657,51 +3657,6 @@ function checkScheduledChapters() {
 setInterval(checkScheduledChapters, 60000);
 </script>
 
-<!--
-  NOTE: Live streaming functionality has been removed from this application.
-  All live stream modals, styles, and JavaScript functions below this point are deprecated
-  and should be ignored or removed in future updates.
--->
-    • Vista de transmisión en vivo para el transmisor y el espectador.
-    • Panel de ajustes del transmisor se muestra a pantalla completa.
-         - Opciones: Notificaciones, Mostrar estado, Comentarios, Filtro de contenido.
-         - Detector de rostro (simulación: se aplica un filtro de brillo/contraste para "aclarar" la imagen).
-         - Opción para ocultar la barra de vistas.
-    • Gestos swipe:
-         - En la vista del transmisor: deslizar a la izquierda oculta todos los controles y a la derecha los muestra.
-         - En la vista del espectador: deslizar a la izquierda oculta funciones (regalos, likes, etc.) y a la derecha las muestra.
-    • Otras funcionalidades originales: envío de corazones (taps), cuenta regresiva, reporte, gift drawer, etc.
-    • En la vista del espectador se muestra el ícono de vistas proporcionado.
-    • En el banner expandido se elimina el botón “Activar LIVE” y se reemplaza por una animación infinita de “hilos” subiendo.
-
-
-
-
-<style>
-  
-</style>
-
-  
-    <!-- Top Bar -->
-    <div class="top-bar bg-black/30 backdrop-blur-sm px-4 py-3">
-      <div class="user-info">
-        <i class="fas fa-arrow-left" style="color: white; font-size: 1.5rem; cursor:pointer;" onclick="closeLiveViewModal()"></i>
-        <div class="user-profile">
-          <i class="fas fa-user" style="background: linear-gradient(to right, #00D6C9, #00A0B0); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
-          <span id="streamerName" class="text-white font-medium">Broadcast Name</span>
-        </div>
-      </div>
-      <div class="viewer-count bg-black/40 px-3 py-1 rounded-full">
-        <span id="viewerCountLive" class="text-[#00D6C9]">0</span>
-        <img src="https://cdn-icons-png.freepik.com/512/10985/10985667.png" alt="Views" class="w-5 h-5 inline-block">
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-
 
 
 
@@ -4809,7 +4764,6 @@ async function likeNote(noteId) {
     measurementId: "G-XEQ1J354HM"
   };
   firebase.initializeApp(firebaseConfig);
-  // Todos los usuarios están autorizados para transmitir en vivo
   const authorizedEmails = [];
   /*********************** FUNCIONES ADICIONALES **************************/
   async function loadPhotos() {
@@ -5401,12 +5355,6 @@ async function likeNote(noteId) {
     const mainAppContainer = document.getElementById('main-app');
     
     if (user) {
-      if (authorizedEmails.includes(user.email)) {
-        document.getElementById('live-transmit-btn').style.display = "block";
-      } else {
-        document.getElementById('live-transmit-btn').style.display = "none";
-      }
-      
       // CARGAR ESTADÍSTICAS EN TIEMPO REAL
       loadUserStats(user.uid);
       
@@ -8248,75 +8196,6 @@ async function performSearch(query) {
     <p style="font-size: 1.2rem;">Please try again later.</p>
   </div>
   <!-- FIN MODAL DE BLOQUEO -->
-  <!-- SECCIÓN DE TRANSMISIÓN EN VIVO (LIVE) - ESTILO TIKTOK -->
-  <!-- Por defecto, esta sección está oculta. Deberás usar JavaScript para mostrarla al hacer clic en el icono de transmisión. -->
-  <div id="tiktok-live-section" class="live-container" style="display: none;">
-      <!-- 1. Capa de Video (Simulada) -->
-      <div class="live-video-placeholder">
-          <!-- Aquí iría el stream de video real -->
-      </div>
-
-      <!-- 2. Capa de Interfaz (UI) -->
-      <div class="live-ui-overlay">
-          <!-- Elementos de la Interfaz Superior Izquierda (Información del Streamer) -->
-          <div class="ui-top-left">
-              <div class="streamer-info">
-                  <div class="streamer-avatar"></div>
-                  <div class="streamer-details">
-                      <span class="streamer-name">@NombreUsuario</span>
-                      <span class="live-status">EN VIVO</span>
-                  </div>
-                  <button class="follow-button">Seguir</button>
-              </div>
-              <div class="viewer-count">
-                  <span class="icon-eye">👁️</span>
-                  <span class="count">999</span>
-              </div>
-          </div>
-
-          <!-- Elementos de la Interfaz Superior Derecha (Botón de Cerrar y Compartir) -->
-          <div class="ui-top-right">
-              <button class="share-button">📤</button>
-              <button class="close-button" onclick="document.getElementById('tiktok-live-section').style.display='none';">❌</button>
-          </div>
-
-          <!-- Elementos de la Interfaz Inferior (Chat y Acciones) -->
-          <div class="ui-bottom">
-              <!-- Área de Comentarios/Chat -->
-              <div class="chat-area">
-                  <div class="comment-bubble">
-                      <span class="comment-user">@Usuario1:</span>
-                      <span class="comment-text">¡Hola a todos!</span>
-                  </div>
-                  <div class="comment-bubble gift-comment">
-                      <span class="comment-user">@Usuario2:</span>
-                      <span class="comment-text">Ha enviado un 🎁 (Regalo)</span>
-                  </div>
-                  <div class="comment-bubble">
-                      <span class="comment-user">@Usuario3:</span>
-                      <span class="comment-text">Me encanta el stream!</span>
-                  </div>
-              </div>
-
-              <!-- Botones de Acción (Regalo, Comentario, Like) -->
-              <div class="action-bar">
-                  <div class="input-container">
-                      <input type="text" placeholder="Añade un comentario..." class="comment-input">
-                      <button class="send-button">➡️</button>
-                  </div>
-                  <button class="gift-button">🎁</button>
-                  <button class="like-button">❤️</button>
-              </div>
-          </div>
-
-          <!-- Animación de Likes (Corazones Flotantes) -->
-          <div class="like-animation-area">
-              <!-- Los corazones se agregarían aquí dinámicamente con JS/CSS -->
-          </div>
-      </div>
-  </div>
-  <!-- FIN SECCIÓN DE TRANSMISIÓN EN VIVO (LIVE) -->-3 rounded-lg mb-2 border border-gray-200">
-              <div class="flex items-center space-x-2">
                 <div class="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
                   <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4z"/>
