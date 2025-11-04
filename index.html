@@ -3677,34 +3677,7 @@ setInterval(checkScheduledChapters, 60000);
 -->
 
 
-<!-- Modal de Bloqueo para Transmisión (por red y operador) -->
-<div id="transmission-block-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" style="background: rgba(0,0,0,0.8);">
-  <div class="bg-white p-6 rounded-xl text-center max-w-md mx-4">
-    <!-- Spinner animado (usamos Font Awesome para el spinner) -->
-    <div class="spinner mb-4">
-      <i class="fas fa-spinner fa-spin fa-3x" style="color:#00D6C9;"></i>
-    </div>
-    <p class="text-lg font-bold mb-2">Función no disponible</p>
-    <p class="text-sm">
-      Por motivos de privacidad, esta función estará inhabilitada hasta nuevo aviso.<br><br>
-      Estamos trabajando para resolver este asunto lo antes posible. Mientras tanto, puedes seguir usando las demás funciones increíbles de la plataforma.<br><br>
-      ¡Gracias por tu comprensión!
-    </p>
-  </div>
-</div>
 
-<!-- Estilos para el spinner -->
-<style>
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-</style>
 
 <!-- Funciones y detecciones para bloqueos y ajustes de transmisión -->
 <script>
@@ -4093,162 +4066,17 @@ setInterval(checkScheduledChapters, 60000);
   </div>
 </div>
 
-<!-- MODAL DE GIFT DRAWER -->
-<div id="gift-drawer" class="bg-gradient-to-b from-[#1A2235] to-[#273852]">
-  <div class="gift-container">
-    <h2 class="text-xl font-bold mb-4 text-center text-white">Enviar Regalo</h2>
-    <div class="gift-grid">
-      <!-- Ítems originales (algunos se muestran como GIF y otros en video para un look moderno) -->
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('cupido')">
-        <img src="https://i.pinimg.com/originals/2d/f8/97/2df897364f655a0b14070a9e2f95d602.gif" alt="Cupido">
-        <span class="text-[#00D6C9]">Cupido</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('diamante')">
-        <img src="https://i.pinimg.com/originals/79/a5/49/79a54992591652b1595c6c61c49170fb.gif" alt="Diamante">
-        <span class="text-[#00D6C9]">Diamante</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('oso_beaboo')">
-        <img src="https://www.icegif.com/wp-content/uploads/2021/11/icegif-346.gif" alt="oso Beaboo">
-        <span class="text-[#00D6C9]">oso Beaboo</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('oso_saltarin')">
-        <img src="https://www.icegif.com/wp-content/uploads/2021/11/icegif-347.gif" alt="oso saltarín">
-        <span class="text-[#00D6C9]">oso saltarín</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('besboos_carinosos')">
-        <img src="https://i.pinimg.com/originals/3b/d4/d9/3bd4d9778b5e0a11ab141cb7b545ab10.gif" alt="Besboos cariñosos">
-        <span class="text-[#00D6C9]">Besboos cariñosos</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('besboos_leyendo')">
-        <img src="https://i.pinimg.com/originals/c6/41/ba/c641babc376ffe10f65ee472a646c6e1.gif" alt="besboos leyendo">
-        <span class="text-[#00D6C9]">besboos leyendo</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('Selecciona a Harry')">
-        <img src="https://media2.giphy.com/media/9EnuwMN4qxFoDfnJam/200w.gif" alt="Selecciona a Harry">
-        <span class="text-[#00D6C9]">Selecciona a Harry</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('Galaxia Blanca')">
-        <img src="https://64.media.tumblr.com/632f8d471cdef6eb0a5018d125ce6475/tumblr_mv4rb608vh1s5jjtzo1_400.gif" alt="Galaxia Blanca">
-        <span class="text-[#00D6C9]">Galaxia Blanca</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('baile')">
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0_aNKZP5QwCAtf0QD5SBK4JulDqNJr6UDg8w4R-E_12arxSsP_HBQhksCL-7xfipx_uVmYbagEFjE8tZGBX-AO40PwMJvIOpr49e_sedIGjCWkUqkrUJZGR4vwr4ygNUrR1hreOsTgc4/s1600/BkM47.gif" alt="baile">
-        <span class="text-[#00D6C9]">baile</span>
-      </div>
-
-      <!-- Nuevos regalos -->
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('arcoiris')">
-        <img src="https://i.pinimg.com/originals/17/9c/e7/179ce7068a3c543261505ea69398b714.gif" alt="Arcoiris">
-        <span class="text-[#00D6C9]">Arcoiris</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('Love Max')">
-        <img src="https://i.pinimg.com/originals/28/89/15/28891591a6c88725b46c3e9774c3aefc.gif" alt="Love Max">
-        <span class="text-[#00D6C9]">Love Max</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('pastel')">
-        <img src="https://i.gifer.com/3EcT.gif" alt="Pastel">
-        <span class="text-[#00D6C9]">Pastel</span>
-      </div>
-      <!-- Se omite "baile" ya que ya está incluido arriba -->
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('musica')">
-        <img src="https://i.pinimg.com/originals/68/fc/a0/68fca09b36725b767735abef8c7e1117.gif" alt="Música">
-        <span class="text-[#00D6C9]">Música</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('sol')">
-        <img src="https://cdn.pixabay.com/animation/2024/03/08/13/17/13-17-23-34_512.gif" alt="Sol">
-        <span class="text-[#00D6C9]">Sol</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('nube')">
-        <img src="https://cdn.pixabay.com/animation/2022/09/17/16/20/16-20-08-700_512.gif" alt="Nube">
-        <span class="text-[#00D6C9]">Nube</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('globo')">
-        <img src="https://images.emojiterra.com/google/noto-emoji/animated-emoji/1f388.gif" alt="Globo">
-        <span class="text-[#00D6C9]">Globo</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('caramelo')">
-        <img src="https://i.pinimg.com/originals/e2/9c/7b/e29c7bc3faadc09dfcddb6ca11243c6d.gif" alt="Caramelo">
-        <span class="text-[#00D6C9]">Caramelo</span>
-      </div>
-      <div class="gift-item bg-black/20 backdrop-blur-sm rounded-lg" onclick="sendGift('fuego')">
-        <img src="https://media.tenor.com/qxyNYoXRT6wAAAAj/fuego.gif" alt="fuego">
-        <span class="text-[#00D6C9]">fuego</span>
-      </div>
-    </div>
-    <button onclick="closeGiftDrawer()" class="mt-4 bg-gradient-to-r from-[#00D6C9] to-[#00A0B0] text-white p-2 rounded-full w-full">
-      Cancelar
-    </button>
-  </div>
-</div>
 
 
-<!-- CONTENEDOR PARA LA ANIMACIÓN DEL REGALO -->
-<div id="gift-animation"></div>
+
+
 
 <!-- INPUTS ocultos para video pregrabado y audio -->
 <input type="file" id="live-video-input" accept="video/*" class="hidden" onchange="handleLiveVideoUpload(event)">
 <input type="file" id="live-audio-es" accept="audio/*" class="hidden">
 <input type="file" id="live-audio-en" accept="audio/*" class="hidden">
 
-<!-- PANEL DE AJUSTES A PANTALLA COMPLETA -->
-<div id="settings-fullscreen" class="fixed inset-0 bg-black/80 z-50 hidden">
-  <div class="w-full h-full flex flex-col">
-    <!-- Encabezado -->
-    <header class="p-4 bg-gradient-to-r from-[#00D6C9] to-[#00A0B0] flex justify-between items-center">
-      <h2 class="text-white text-xl">Ajustes de Transmisión</h2>
-      <button onclick="closeSettingsFullscreen()" class="text-white text-2xl">&times;</button>
-    </header>
-    <!-- Contenido de ajustes -->
-    <div class="flex-1 overflow-y-auto p-4 bg-[#171F30]">
-      <!-- Opciones originales -->
-      <div class="space-y-4">
-        <div class="flex items-center justify-between">
-          <span class="text-white">Notificaciones</span>
-          <label class="switch">
-            <input type="checkbox" id="notifications-toggle" checked>
-            <span class="slider round"></span>
-          </label>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-white">Mostrar estado</span>
-          <label class="switch">
-            <input type="checkbox" id="status-toggle" checked>
-            <span class="slider round"></span>
-          </label>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-white">Comentarios</span>
-          <label class="switch">
-            <input type="checkbox" id="comments-toggle" checked>
-            <span class="slider round"></span>
-          </label>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-white">Filtro de contenido</span>
-          <label class="switch">
-            <input type="checkbox" id="filter-toggle">
-            <span class="slider round"></span>
-          </label>
-        </div>
-        <!-- Nuevas opciones de ajustes -->
-        <div class="flex items-center justify-between">
-          <span class="text-white">Detector de rostro (efecto belleza)</span>
-          <label class="switch">
-            <input type="checkbox" id="face-detection-toggle">
-            <span class="slider round"></span>
-          </label>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-white">Ocultar barra de vistas</span>
-          <label class="switch">
-            <input type="checkbox" id="hide-viewbar-toggle">
-            <span class="slider round"></span>
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <!-- Estilos adicionales -->
 <style>
