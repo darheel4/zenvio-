@@ -3673,6 +3673,46 @@ setInterval(checkScheduledChapters, 60000);
     • Otras funcionalidades originales: envío de corazones (taps), cuenta regresiva, reporte, gift drawer, etc.
     • En la vista del espectador se muestra el ícono de vistas proporcionado.
     • En el banner expandido se elimina el botón “Activar LIVE” y se reemplaza por una animación infinita de “hilos” subiendo.
+    • En el Gift Drawer, algunos regalos se muestran en formato video (moderno) en lugar de solo GIF.
+-->
+
+
+
+
+<!-- Funciones y detecciones para bloqueos y ajustes de transmisión -->
+<script>
+  // Función para detectar restricciones basadas en país y operador
+  function checkTransmissionAvailability() {
+    return true;
+  }
+  // Función para aplicar la vista "cinematográfica" (YouTube) al video
+  function setLiveStreamYouTubeView() {
+    const video = document.getElementById('live-localVideo');
+    if (video) {
+      // Se muestra el video completo sin recortes (similar a letterboxing)
+      video.style.objectFit = 'contain';
+      video.style.width = '100vw';
+      video.style.height = 'auto';
+      // Se puede ajustar el contenedor para que tenga fondo negro
+      const container = video.parentElement;
+      if (container) {
+        container.style.backgroundColor = 'black';
+        container.style.display = 'flex';
+        container.style.justifyContent = 'center';
+        container.style.alignItems = 'center';
+      }
+    }
+  }
+  // Interceptar el clic en el botón de transmisión
+  document.getElementById('live-startBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    // Se remueve la verificación de restricciones:
+    document.getElementById('transmission-block-modal').classList.add('hidden');
+    document.getElementById('live-stream-modal').classList.remove('hidden');
+    setLiveStreamYouTubeView();
+    // Inicia la transmisión (llamada a la función correspondiente)
+  });
+</script>
 
 
 
@@ -5141,7 +5181,17 @@ async function likeNote(noteId) {
     document.getElementById("settings-fullscreen").classList.add("hidden");
   }
 
+  function closeLiveViewModal() {
+    document.getElementById('live-view-modal').classList.add('hidden');
+  }
 
+  function expandPromoBanner() {
+    document.getElementById('expanded-banner').classList.remove('translate-y-full');
+  }
+
+  function closeExpandedBanner() {
+    document.getElementById('expanded-banner').classList.add('translate-y-full');
+  }
 
   function sendGift(giftName) {
     alert("Enviado regalo: " + giftName);
@@ -5153,6 +5203,14 @@ async function likeNote(noteId) {
   }
 
 
+  function handleLiveVideoUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const video = document.getElementById('live-localVideo');
+      video.src = URL.createObjectURL(file);
+      video.play();
+    }
+  }
   
   
   window.openNoteModal = function() {
@@ -5187,6 +5245,12 @@ async function likeNote(noteId) {
     });
   }
   // Para vista del Espectador: ocultar/mostrar funciones (regalos, likes)
+  const viewerModal = document.getElementById("live-view-modal");
+  viewerModal.addEventListener("touchstart", function(e) {
+    touchstartX = e.changedTouches[0].screenX;
+  }, false);
+  viewerModal.addEventListener("touchend", function(e) {
+    touchendX = e.changedTouches[0].screenX;
     handleViewerSwipe();
   }, false);
 
@@ -6862,11 +6926,40 @@ async function performSearch(query) {
       } else {
         bioElement.textContent = authorData.bio || '';
       }
+      firebase.database().ref(`liveStreams/${authorId}/isLive`).once('value').then(snapshot => {
+        if (snapshot.exists() && snapshot.val()) {
+          let liveLabel = document.getElementById('live-label');
+          if (!liveLabel) {
+            liveLabel = document.createElement('span');
+            liveLabel.id = "live-label";
+            // Cambiamos el texto a "DIRECTO" y el fondo a verde
+            liveLabel.textContent = "DIRECTO";
+            liveLabel.className = "absolute top-0 left-0 bg-green-600 text-white px-2 py-1 rounded text-xs";
+            const container = document.getElementById('author-profile-img-container');
+            container.style.position = "relative";
+            container.appendChild(liveLabel);
+          }
+          // Agregamos una clase para un borde pulsante de color verde (estilo Duolingo)
+          document.getElementById('author-profile-image').classList.add('live-border');
+        } else {
+          let liveLabel = document.getElementById('live-label');
+          if (liveLabel) {
+            liveLabel.remove();
+          }
+          document.getElementById('author-profile-image').classList.remove('live-border');
+        }
+      });
+    });
     currentViewedAuthorId = authorId;
     document.getElementById('author-profile-modal').style.display = "block";
     updateFollowIcon();
     loadAuthorStories(authorId);
     document.getElementById('author-profile-image').onclick = function() {
+      firebase.database().ref(`liveStreams/${authorId}/isLive`).once('value').then(snapshot => {
+        if (snapshot.exists() && snapshot.val()) {
+          openLiveViewModal(authorId);
+        }
+      });
     };
   }
 
@@ -8066,6 +8159,415 @@ async function performSearch(query) {
         alert("Error al descargar la historia: " + err.message);
         icon.classList.remove('fa-spin');
       });
+  }
+  /*********************** LIVE STREAMING **************************/
+  let liveLocalStream = null;
+  let livePeerConnection = null;
+  let liveBroadcasting = false;
+  let currentBroadcasterId = null;
+  let giftListenerRef = null;
+
+  function giftListenerCallback(snapshot) {
+    let gift = snapshot.val();
+    let giftUrl = "";
+    if (gift.giftType === "mariposas") {
+      giftUrl = "https://i.pinimg.com/originals/7c/29/36/7c2936db7563085ef7470d50fd06e4e3.gif";
+    } else if (gift.giftType === "ballena") {
+      giftUrl = "https://i.pinimg.com/originals/86/31/83/863183316ed35cfeda7baf9ee1de0596.gif";
+    } else if (gift.giftType === "corazon_coreano") {
+      giftUrl = "https://cdn.pixabay.com/animation/2022/09/17/16/20/16-20-08-700_512.gif";
+    } else if (gift.giftType === "Globo") {
+      giftUrl = "https://i.pinimg.com/originals/2d/f8/97/2df897364f655a0b14070a9e2f95d602.gif";
+    } else if (gift.giftType === "ciudad_deseñcionada") {
+      giftUrl = "https://i.pinimg.com/originals/6a/9a/74/6a9a7425e736575ee78816254227d1a8.gif";
+    } else if (gift.giftType === "diamante") {
+      giftUrl = "https://i.pinimg.com/originals/79/a5/49/79a54992591652b1595c6c61c49170fb.gif";
+    } else if (gift.giftType === "oso_beaboo") {
+      giftUrl = "https://www.icegif.com/wp-content/uploads/2021/11/icegif-346.gif";
+    } else if (gift.giftType === "oso_saltarin") {
+      giftUrl = "https://www.icegif.com/wp-content/uploads/2021/11/icegif-347.gif";
+    } else if (gift.giftType === "besboos_carinosos") {
+      giftUrl = "https://i.pinimg.com/originals/3b/d4/d9/3bd4d9778b5e0a11ab141cb7b545ab10.gif";
+    } else if (gift.giftType === "besboos_leyendo") {
+      giftUrl = "https://i.pinimg.com/originals/c6/41/ba/c641babc376ffe10f65ee472a646c6e1.gif";
+    } else if (gift.giftType === "estrella") {
+      giftUrl = "https://media3.giphy.com/media/svpuvuc70ht48WU6dj/giphy.gif?cid=6c09b952logfyfctuhi46ekgb2g7tmi345ycn9atumxwz7an&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=s";
+    } else if (gift.giftType === "unicornio") {
+      giftUrl = "https://cdn.pixabay.com/animation/2024/12/02/02/56/02-56-03-27_512.gif";
+    } else if (gift.giftType === "arcoiris") {
+      giftUrl = "https://i.pinimg.com/originals/17/9c/e7/179ce7068a3c543261505ea69398b714.gif";
+    } else if (gift.giftType === "pastel") {
+      giftUrl = "https://i.gifer.com/3EcT.gif";
+    } else if (gift.giftType === "baile") {
+      giftUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0_aNKZP5QwCAtf0QD5SBK4JulDqNJr6UDg8w4R-E_12arxSsP_HBQhksCL-7xfipx_uVmYbagEFjE8tZGBX-AO40PwMJvIOpr49e_sedIGjCWkUqkrUJZGR4vwr4ygNUrR1hreOsTgc4/s1600/BkM47.gif";
+    } else if (gift.giftType === "musica") {
+      giftUrl = "https://i.pinimg.com/originals/68/fc/a0/68fca09b36725b767735abef8c7e1117.gif";
+    } else if (gift.giftType === "sol") {
+      giftUrl = "https://cdn.pixabay.com/animation/2024/03/08/13/17/13-17-23-34_512.gif";
+    } else if (gift.giftType === "nube") {
+      giftUrl = "https://cdn.pixabay.com/animation/2022/09/17/16/20/16-20-08-700_512.gif";
+    } else if (gift.giftType === "globo") {
+      giftUrl = "https://images.emojiterra.com/google/noto-emoji/animated-emoji/1f388.gif";
+    } else if (gift.giftType === "caramelo") {
+      giftUrl = "https://i.pinimg.com/originals/e2/9c/7b/e29c7bc3faadc09dfcddb6ca11243c6d.gif";
+    } else if (gift.giftType === "delfin") {
+      giftUrl = "https://media.tenor.com/TyrY0krJG3kAAAAj/milk-and-mocha.gif";
+    } else if (gift.giftType === "fuego") {
+      giftUrl = "https://i.pinimg.com/originals/af/8a/27/af8a27bf984e189f6a6bd7a6922075c1.gif";
+    }
+    if (giftUrl !== "") {
+      showGiftAnimation(giftUrl, gift.senderName);
+    }
+    snapshot.ref.remove();
+  }
+
+  function listenForGifts() {
+    if (!currentBroadcasterId) return;
+    giftListenerRef = firebase.database().ref(`liveStreams/${currentBroadcasterId}/gifts`);
+    giftListenerRef.on('child_added', giftListenerCallback);
+  }
+
+  function stopListeningForGifts() {
+    if (giftListenerRef) {
+      giftListenerRef.off('child_added', giftListenerCallback);
+      giftListenerRef = null;
+    }
+  }
+
+  function listenForComments(broadcasterId) {
+    const commentsRef = firebase.database().ref(`liveStreams/${broadcasterId}/comments`);
+    commentsRef.on('child_added', snapshot => {
+      const comment = snapshot.val();
+      const commentElem = document.createElement('div');
+      commentElem.className = 'comment-bubble';
+      commentElem.textContent = comment.senderName + ": " + comment.text;
+      if (document.getElementById('commentsContainerLive')) {
+        document.getElementById('commentsContainerLive').appendChild(commentElem);
+        setTimeout(() => {
+          commentElem.remove();
+        }, 3000);
+      }
+      if (firebase.auth().currentUser && firebase.auth().currentUser.uid === broadcasterId) {
+        const bcContainer = document.getElementById('broadcasterCommentsContainer');
+        if (bcContainer) {
+          const clone = commentElem.cloneNode(true);
+          bcContainer.appendChild(clone);
+          bcContainer.scrollTop = bcContainer.scrollHeight;
+        }
+      }
+    });
+  }
+
+  function openLiveStreamModal() {
+    const user = firebase.auth().currentUser;
+    if (!user) {
+      alert("Debes estar autenticado para transmitir en vivo.");
+      return;
+    }
+    // Todos los usuarios pueden transmitir en vivo
+    if (!user.email) {
+      alert("Por favor verifica tu correo electrónico para transmitir en vivo.");
+      return;
+    }
+    currentBroadcasterId = user.uid;
+    let useCamera = confirm("¿Desea transmitir en vivo usando su cámara? Presione OK para cámara, Cancelar para video pregrabado.");
+    if (useCamera) {
+      document.getElementById('live-stream-modal').classList.remove('hidden');
+      navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: {
+            echoCancellation: true
+          }
+        })
+        .then(stream => {
+          liveLocalStream = stream;
+          document.getElementById('live-localVideo').srcObject = stream;
+          setTimeout(() => {
+            document.getElementById('live-spinner').style.display = "none";
+          }, 3000);
+        })
+        .catch(err => {
+          alert("Error al acceder a la cámara: " + err);
+        });
+    } else {
+      document.getElementById('live-video-input').click();
+    }
+    const profileImg = document.getElementById('profile-image');
+    if (profileImg) {
+      profileImg.classList.add('live-border');
+    }
+    document.getElementById('live-spinner').style.display = "flex";
+    listenForComments(currentBroadcasterId);
+    listenForGifts();
+  }
+
+  function handleLiveVideoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const videoElement = document.createElement('video');
+    videoElement.src = URL.createObjectURL(file);
+    videoElement.autoplay = true;
+    videoElement.loop = true;
+    videoElement.controls = true;
+    videoElement.play();
+    videoElement.onloadedmetadata = function() {
+      const canvas = document.createElement('canvas');
+      canvas.width = videoElement.videoWidth;
+      canvas.height = videoElement.videoHeight;
+      const ctx = canvas.getContext('2d');
+      let promotionText = prompt("Ingrese información de promoción (opcional):");
+
+      function drawFrame() {
+        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+        ctx.font = "30px sans-serif";
+        ctx.fillStyle = "rgba(88,204,2,0.7)";
+        ctx.textAlign = "right";
+        ctx.fillText("BeaBoo", canvas.width - 10, canvas.height - 10);
+        if (promotionText) {
+          ctx.font = "24px sans-serif";
+          ctx.fillStyle = "rgba(255,255,255,0.8)";
+          ctx.textAlign = "left";
+          ctx.fillText(promotionText, 10, 30);
+        }
+        requestAnimationFrame(drawFrame);
+      }
+      drawFrame();
+      let canvasStream = canvas.captureStream(30);
+      let chosenAudioPromise;
+      let chosenLanguage = prompt("Ingrese el idioma de audio a transmitir: 'es' para español, 'en' para inglés. Deje en blanco para usar el audio original.");
+      if (chosenLanguage === "es") {
+        const audioFileInput = document.getElementById('live-audio-es');
+        if (audioFileInput.files.length > 0) {
+          const audioFile = audioFileInput.files[0];
+          let audioElement = document.createElement('audio');
+          audioElement.src = URL.createObjectURL(audioFile);
+          audioElement.play();
+          chosenAudioPromise = new Promise(resolve => {
+            audioElement.onloadedmetadata = function() {
+              resolve(audioElement.captureStream().getAudioTracks()[0]);
+            }
+          });
+        }
+      } else if (chosenLanguage === "en") {
+        const audioFileInput = document.getElementById('live-audio-en');
+        if (audioFileInput.files.length > 0) {
+          let audioElement = document.createElement('audio');
+          audioElement.src = URL.createObjectURL(audioFileInput.files[0]);
+          audioElement.play();
+          chosenAudioPromise = new Promise(resolve => {
+            audioElement.onloadedmetadata = function() {
+              resolve(audioElement.captureStream().getAudioTracks()[0]);
+            }
+          });
+        }
+      }
+      if (!chosenAudioPromise) {
+        let videoStream = videoElement.captureStream();
+        chosenAudioPromise = Promise.resolve(videoStream.getAudioTracks()[0]);
+      }
+      chosenAudioPromise.then(audioTrack => {
+        if (audioTrack) {
+          canvasStream.addTrack(audioTrack);
+        }
+        liveLocalStream = canvasStream;
+        document.getElementById('live-stream-modal').classList.remove('hidden');
+        document.getElementById('live-localVideo').srcObject = liveLocalStream;
+        setTimeout(() => {
+          document.getElementById('live-spinner').style.display = "none";
+        }, 3000);
+      });
+    };
+  }
+
+  function closeLiveStreamModal() {
+    document.getElementById('live-stream-modal').classList.add('hidden');
+    if (liveLocalStream) {
+      liveLocalStream.getTracks().forEach(track => track.stop());
+      liveLocalStream = null;
+    }
+    if (liveBroadcasting) {
+      endLiveStream();
+    }
+    const profileImg = document.getElementById('profile-image');
+    if (profileImg) {
+      profileImg.classList.remove('live-border');
+    }
+    stopListeningForGifts();
+  }
+
+  function startLiveCountdown(duration, callback) {
+    let remaining = duration;
+    const countdownEl = document.getElementById('live-countdown');
+    countdownEl.textContent = remaining;
+    const interval = setInterval(() => {
+      remaining--;
+      if (remaining > 0) {
+        countdownEl.textContent = remaining;
+      } else {
+        clearInterval(interval);
+        countdownEl.textContent = "";
+        callback();
+      }
+    }, 1000);
+  }
+  const liveStartBtnMain = document.getElementById('live-startBtn');
+  if (liveStartBtnMain) {
+    liveStartBtnMain.addEventListener('click', () => {
+      startLiveCountdown(10, () => {
+        const liveIndicator = document.getElementById('live-indicator');
+        const liveStartBtn = document.getElementById('live-startBtn');
+        const liveEndBtn = document.getElementById('live-endBtn');
+        if (liveIndicator) liveIndicator.classList.remove('hidden');
+        if (liveStartBtn) liveStartBtn.classList.add('hidden');
+        if (liveEndBtn) liveEndBtn.classList.remove('hidden');
+        startBroadcasting();
+      });
+    });
+  }
+
+  function startBroadcasting() {
+    livePeerConnection = new RTCPeerConnection();
+    liveLocalStream.getTracks().forEach(track => {
+      livePeerConnection.addTrack(track, liveLocalStream);
+    });
+    livePeerConnection.onicecandidate = event => {
+      if (event.candidate) {
+        firebase.database().ref(`liveStreams/${currentBroadcasterId}/candidates`).push(event.candidate.toJSON());
+      }
+    };
+    livePeerConnection.createOffer().then(offer => {
+      return livePeerConnection.setLocalDescription(offer).then(() => offer);
+    }).then(offer => {
+      firebase.database().ref(`liveStreams/${currentBroadcasterId}`).set({
+        isLive: true,
+        offer: offer,
+        views: 0
+      });
+      liveBroadcasting = true;
+      firebase.database().ref(`liveStreams/${currentBroadcasterId}/views`).on('value', snapshot => {
+        const views = snapshot.val() || 0;
+        document.getElementById('live-viewCount').textContent = views + " vistas";
+      });
+      listenForComments(currentBroadcasterId);
+    });
+  }
+
+  function endLiveStream() {
+    if (livePeerConnection) {
+      livePeerConnection.close();
+      livePeerConnection = null;
+    }
+    firebase.database().ref(`liveStreams/${currentBroadcasterId}`).remove();
+    liveBroadcasting = false;
+    const profileImg = document.getElementById('profile-image');
+    if (profileImg) {
+      profileImg.classList.remove('live-border');
+    }
+    setTimeout(() => {
+      closeLiveStreamModal();
+    }, 3000);
+  }
+  const liveEndBtnMain = document.getElementById('live-endBtn');
+  if (liveEndBtnMain) {
+    liveEndBtnMain.addEventListener('click', () => {
+      endLiveStream();
+    });
+  }
+
+  function openLiveViewModal(broadcasterId) {
+    liveBroadcasterId = broadcasterId;
+    firebase.database().ref('users/' + broadcasterId).once('value').then(snapshot => {
+      const data = snapshot.val();
+      if (data && data.username) {
+        document.getElementById('streamerName').innerText = data.username;
+      }
+    });
+    document.getElementById('live-view-modal').classList.remove('hidden');
+    firebase.database().ref(`liveStreams/${broadcasterId}/views`).on('value', snapshot => {
+      const views = snapshot.val() || 0;
+      document.getElementById('viewerCountLive').textContent = views;
+    });
+    firebase.database().ref(`liveStreams/${broadcasterId}/views`).transaction(current => (current || 0) + 1);
+    const viewerPC = new RTCPeerConnection();
+    viewerPC.onicecandidate = event => {
+      if (event.candidate) {
+        firebase.database().ref(`liveStreams/${broadcasterId}/viewerCandidates`).push(event.candidate.toJSON());
+      }
+    };
+    viewerPC.ontrack = event => {
+      document.getElementById('live-remoteVideo').srcObject = event.streams[0];
+    };
+    firebase.database().ref(`liveStreams/${broadcasterId}/offer`).once('value').then(snapshot => {
+      const offer = snapshot.val();
+      if (!offer) {
+        alert("El autor no está transmitiendo.");
+        closeLiveViewModal();
+        return;
+      }
+      viewerPC.setRemoteDescription(new RTCSessionDescription(offer))
+        .then(() => viewerPC.createAnswer())
+        .then(answer => viewerPC.setLocalDescription(answer).then(() => answer))
+        .then(answer => {
+          firebase.database().ref(`liveStreams/${broadcasterId}/answer`).set(answer);
+        });
+    });
+    firebase.database().ref(`liveStreams/${broadcasterId}`).on('value', snapshot => {
+      if (!snapshot.exists()) {
+        document.getElementById('live-endedMessage') && document.getElementById('live-endedMessage').classList.remove('hidden');
+        setTimeout(closeLiveViewModal, 3000);
+      }
+    });
+    listenForComments(broadcasterId);
+    window.currentViewerPC = viewerPC;
+  }
+
+  function closeLiveViewModal() {
+    document.getElementById('live-view-modal').classList.add('hidden');
+    document.getElementById('live-endedMessage') && document.getElementById('live-endedMessage').classList.add('hidden');
+    if (window.currentViewerPC) {
+      window.currentViewerPC.close();
+      window.currentViewerPC = null;
+    }
+  }
+  document.getElementById('gift-btn') && document.getElementById('gift-btn').addEventListener('click', () => {
+    document.getElementById('gift-drawer').classList.add('open');
+  });
+
+  function closeGiftDrawer() {
+    document.getElementById('gift-drawer').classList.remove('open');
+  }
+
+  function sendGift(giftType) {
+    const currentUser = firebase.auth().currentUser;
+    if (!currentUser || currentUser.uid === liveBroadcasterId) {
+      alert("No puedes enviar regalos a ti mismo.");
+      return;
+    }
+    let giftData = {
+      giftType: giftType,
+      senderName: currentUser.displayName || currentUser.email || "Alguien",
+      timestamp: Date.now()
+    };
+    firebase.database().ref(`liveStreams/${liveBroadcasterId}/gifts`).push(giftData).then(() => {
+      closeGiftDrawer();
+    }).catch(error => {
+      console.error("Error al enviar regalo:", error);
+    });
+  }
+
+  function showGiftAnimation(giftUrl, senderName) {
+    const transmitBtn = document.getElementById('live-startBtn');
+    if (transmitBtn) transmitBtn.style.display = 'none';
+    const animContainer = document.getElementById('gift-animation');
+    animContainer.innerHTML = `
+        <div class="text-center">
+          <p class="text-white mb-1">${senderName} ha enviado un regalo</p>
+          <img src="${giftUrl}" alt="Regalo" class="mx-auto" style="max-width: 80%; max-height: 80%;">
+        </div>`;
+    animContainer.classList.add('show');
+    setTimeout(() => {
+      animContainer.classList.remove('show');
+    }, 4000);
   }
   /*********************** REPORTAR HISTORIA Y BLOQUEO **************************/
   let lastX = null,
@@ -10057,6 +10559,18 @@ function closeBeabooStudio() {
     }, 1500);
   }
 
+  function updateLikeCountLive() {
+    likesLive++;
+    if (likesLive >= 1000) {
+      likeCountLive.textContent = (likesLive / 1000).toFixed(1) + 'K';
+    } else {
+      likeCountLive.textContent = likesLive;
+    }
+  }
+  if (heartButton) {
+    heartButton.addEventListener('click', () => {
+      const rect = heartButton.getBoundingClientRect();
+      createHeart(rect.left + rect.width / 2, rect.top + rect.height / 2);
       updateLikeCountLive();
     });
   }
