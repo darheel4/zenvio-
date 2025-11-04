@@ -3676,41 +3676,7 @@ setInterval(checkScheduledChapters, 60000);
     • En el Gift Drawer, algunos regalos se muestran en formato video (moderno) en lugar de solo GIF.
 -->
 
-<!-- VISTA DE TRANSMISIÓN EN VIVO (Transmisor) -->
-<div id="live-stream-modal" class="fixed inset-0 bg-gradient-to-b from-[#171F30] to-[#273852] z-50 hidden">
-  <div class="relative w-full h-full">
-    <!-- Contador de vistas -->
-    <div id="live-viewCount" class="absolute top-4 right-4 text-xl bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-[#00D6C9]">
-      0 vistas
-    </div>
-    <!-- Contador de taps/corazones -->
-    <div id="live-tapCount" class="absolute top-4 left-1/2 transform -translate-x-1/2 text-xl bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-[#00D6C9]">
-      0 ❤️
-    </div>
-    <!-- Video local -->
-    <video id="live-localVideo" autoplay muted playsinline class="w-full h-full object-cover"></video>
-    <!-- Overlay con cuenta regresiva -->
-    <div id="live-overlay" class="absolute inset-0 flex flex-col items-center justify-center">
-      <div id="live-countdown" class="text-6xl font-bold text-[#00D6C9]"></div>
-      <div id="live-indicator" class="hidden"></div>
-    </div>
-    <!-- Botón de ajustes (abre la pantalla completa de ajustes) -->
-    <button id="live-settingsBtn" class="absolute top-4 left-4 bg-black/30 backdrop-blur-sm text-white text-lg rounded-full h-12 w-12 flex items-center justify-center" onclick="openSettingsFullscreen()">
-      <img src="https://img.icons8.com/ios11/512/40C057/settings.png" alt="Ajustes" class="w-6 h-6">
-    </button>
-    <!-- Botón para iniciar transmisión -->
-    <button id="live-startBtn" class="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#00D6C9] to-[#00A0B0] text-white text-2xl rounded-full p-6 shadow-lg"></button>
 
-    <!-- Botón para cerrar el modal de transmisión -->
-    <button id="live-closeBtn" onclick="closeLiveStreamModal()" class="absolute top-20 left-4 bg-black/50 text-white text-lg rounded-full h-10 w-10 flex items-center justify-center">
-      X
-    </button>
-    <!-- Spinner -->
-    <div id="live-spinner" class="absolute inset-0 flex items-center justify-center">
-      <i class="fas fa-spinner fa-spin text-6xl" style="color:#00D6C9;"></i>
-    </div>
-  </div>
-</div>
 <!-- Modal de Bloqueo para Transmisión (por red y operador) -->
 <div id="transmission-block-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" style="background: rgba(0,0,0,0.8);">
   <div class="bg-white p-6 rounded-xl text-center max-w-md mx-4">
@@ -5593,10 +5559,6 @@ async function likeNote(noteId) {
     document.getElementById("settings-fullscreen").classList.add("hidden");
   }
 
-  function closeLiveStreamModal() {
-    document.getElementById('live-stream-modal').classList.add('hidden');
-  }
-
   function closeLiveViewModal() {
     document.getElementById('live-view-modal').classList.add('hidden');
   }
@@ -5627,79 +5589,8 @@ async function likeNote(noteId) {
       video.play();
     }
   }
-  // Los event listeners para live se agregarán solo cuando se abra el modal
-  window.addEventListener('load', function() {
-    const liveStartBtn = document.getElementById('live-startBtn');
-    if (liveStartBtn) {
-      liveStartBtn.addEventListener('click', function() {
-        const spinner = document.getElementById('live-spinner');
-        if (spinner) spinner.classList.remove('hidden');
-        this.classList.add('hidden');
-        setTimeout(function() {
-          if (spinner) spinner.classList.add('hidden');
-          document.getElementById('live-overlay').classList.add('hidden');
-        }, 2000);
-      });
-    }
-  });
-
-  function startCountdown() {
-    let countdownElement = document.getElementById('live-countdown');
-    let count = 3;
-    countdownElement.textContent = count;
-    let interval = setInterval(() => {
-      count--;
-      if (count > 0) {
-        countdownElement.textContent = count;
-      } else {
-        clearInterval(interval);
-        countdownElement.textContent = "¡En vivo!";
-        setTimeout(() => {
-          document.getElementById('live-overlay').classList.add('hidden');
-        }, 1000);
-      }
-    }, 1000);
-  }
-  // -------------------------------
-  // Nuevas Funcionalidades en Ajustes
-  // -------------------------------
-  // Detector de rostro (simulación: se aplica filtro de brillo/contraste)
-  function startFaceDetection() {
-    console.log("Detección de rostro activada - aplicando efecto belleza");
-    document.getElementById("live-localVideo").style.filter = "brightness(1.2) contrast(1.1)";
-  }
-
-  function stopFaceDetection() {
-    console.log("Detección de rostro desactivada - quitando efecto");
-    document.getElementById("live-localVideo").style.filter = "";
-  }
-  document.getElementById('face-detection-toggle').addEventListener('change', function() {
-    if (this.checked) {
-      startFaceDetection();
-    } else {
-      stopFaceDetection();
-    }
-  });
-  // Ocultar barra de vistas según el ajuste
-  document.getElementById('hide-viewbar-toggle').addEventListener('change', function() {
-    const viewBar = document.getElementById('live-viewCount');
-    if (this.checked) {
-      viewBar.classList.add('hidden');
-    } else {
-      viewBar.classList.remove('hidden');
-    }
-  });
-  // -------------------------------
-  // Detección de Swipe (Deslizar a la izquierda/derecha)
-  // -------------------------------
-  // Para vista del Transmisor: ocultar/mostrar todos los controles
-  const transmitterModal = document.getElementById("live-stream-modal");
-  if (transmitterModal) {
-    transmitterModal.addEventListener("touchstart", function(e) {
-      touchstartX = e.changedTouches[0].screenX;
-    }, false);
-  }
-
+  
+  
   window.openNoteModal = function() {
     const modal = document.getElementById('note-modal');
     if (modal) modal.classList.remove('hidden');
@@ -5730,32 +5621,6 @@ async function likeNote(noteId) {
       const noteTime = document.getElementById('note-time');
       if (noteTime) noteTime.textContent = 'Expira en 12 horas';
     });
-  }
-  transmitterModal.addEventListener("touchend", function(e) {
-    touchendX = e.changedTouches[0].screenX;
-    handleTransmitterSwipe();
-  }, false);
-
-  function handleTransmitterSwipe() {
-    if (touchstartX - touchendX > 50) {
-      hideTransmitterFunctions();
-    } else if (touchendX - touchstartX > 50) {
-      showTransmitterFunctions();
-    }
-  }
-
-  function hideTransmitterFunctions() {
-    document.getElementById("live-settingsBtn").classList.add("hidden");
-    document.getElementById("live-viewCount").classList.add("hidden");
-    document.getElementById("live-tapCount").classList.add("hidden");
-  }
-
-  function showTransmitterFunctions() {
-    document.getElementById("live-settingsBtn").classList.remove("hidden");
-    if (!document.getElementById('hide-viewbar-toggle').checked) {
-      document.getElementById("live-viewCount").classList.remove("hidden");
-    }
-    document.getElementById("live-tapCount").classList.remove("hidden");
   }
   // Para vista del Espectador: ocultar/mostrar funciones (regalos, likes)
   const viewerModal = document.getElementById("live-view-modal");
