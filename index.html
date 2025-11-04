@@ -18,9 +18,8 @@
     // Detectar idioma del navegador y aplicar traducción inmediatamente
     (function() {
       const userLang = (navigator.language || navigator.userLanguage).split('-')[0];
-      console.log('Idioma del navegador detectado:', userLang);
       
-      // Guardar idioma preferido
+      // Guardar idioma preferido solo si no existe
       if (!localStorage.getItem('preferredLanguage')) {
         localStorage.setItem('preferredLanguage', userLang);
       }
@@ -3573,7 +3572,7 @@ function saveNote() {
     <!-- Sección principal: portada + título/autor -->
     <div class="flex items-start space-x-6 mb-8">
       <!-- Portada estilo Inkitt/Wattpad -->
-      <img id="detail-cover" src="/api/placeholder/400/600" alt="Portada de la historia"
+      <img id="detail-cover" src="https://via.placeholder.com/400x600" alt="Portada de la historia"
            class="w-40 sm:w-48 md:w-56 aspect-[2/3] object-cover rounded-2xl border-2 border-[#FE2C55] shadow-lg">
       
       <!-- Detalles de historia -->

@@ -48,12 +48,29 @@ exports.handler = async (event) => {
     }
 
     if (event.httpMethod === 'POST') {
-      const { action, userId, warning } = JSON.parse(event.body);
-
-      if (!userId) {
+      let body;
+      try {
+        body = JSON.parse(event.body);
+      } catch (e) {
         return {
           statusCode: 400,
-          body: JSON.stringify({ error: 'Missing userId' }),
+          body: JSON.stringify({ error: 'Invalid JSON body' }),
+        };
+      }
+
+      const { action, userId, warning } = body;
+
+      if (!userId || typeof userId !== 'string') {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ error: 'Missing or invalid userId' }),
+        };
+      }
+      
+      if (!action || typeof action !== 'string') {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ error: 'Missing or invalid action' }),
         };
       }
 
