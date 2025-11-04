@@ -2050,11 +2050,7 @@ document.getElementById('note-content').addEventListener('input', function() {
   ]);
 </script>
 
-<style>
-  /* Estilos TikTok */
-  * {
-
-
+<script>
   async function handleNoteLike(noteId, likeButton) {
     const user = firebase.auth().currentUser;
     if (!user) {
@@ -2062,7 +2058,6 @@ document.getElementById('note-content').addEventListener('input', function() {
       return;
     }
 
-    // Verificar si ya dio like
     if (likeButton.classList.contains('text-[#FE2C55]')) {
       alert('Ya diste like a esta nota');
       return;
@@ -2097,7 +2092,6 @@ document.getElementById('note-content').addEventListener('input', function() {
         return;
       }
 
-      // Actualizar UI
       likeButton.classList.add('text-[#FE2C55]');
       const likesCount = likeButton.querySelector('.likes-count');
       if (likesCount) {
@@ -2113,7 +2107,10 @@ document.getElementById('note-content').addEventListener('input', function() {
       likeButton.innerHTML = originalHTML;
     }
   }
+</script>
 
+<style>
+  * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -6346,12 +6343,13 @@ async function performSearch(query) {
       } else {
         bioElement.textContent = authorData.bio || '';
       }
-    currentViewedAuthorId = authorId;
-    document.getElementById('author-profile-modal').style.display = "block";
-    updateFollowIcon();
-    loadAuthorStories(authorId);
-    document.getElementById('author-profile-image').onclick = function() {
-    };
+      currentViewedAuthorId = authorId;
+      document.getElementById('author-profile-modal').style.display = "block";
+      updateFollowIcon();
+      loadAuthorStories(authorId);
+      document.getElementById('author-profile-image').onclick = function() {
+      };
+    });
   }
 
   function closeAuthorProfile() {
@@ -9451,30 +9449,6 @@ function closeBeabooStudio() {
   document.getElementById('beaboo-studio-modal').classList.add('hidden');
   document.getElementById('story-stats').innerHTML = '';
 }
-
-<!-- Script para la vista de Live (Duolingo Live Style) -->
-  const liveContainer = document.getElementById('liveContainer');
-  const heartButton = document.getElementById('heartButton');
-  const heartButtonViewer = document.getElementById('heartButtonViewer');
-  const likeCountLive = document.getElementById('likeCountLive');
-  let likesLive = 0;
-
-  function createHeart(x, y) {
-    const heart = document.createElement('img');
-    heart.src = "https://cdn-0.emojis.wiki/emoji-pics/twitter/green-heart-twitter.png";
-    heart.className = 'floating-heart';
-    heart.style.position = 'absolute';
-    heart.style.left = `${x - 12}px`;
-    heart.style.top = `${y - 12}px`;
-    liveContainer.appendChild(heart);
-    setTimeout(() => {
-      heart.remove();
-    }, 1500);
-  }
-
-      updateLikeCountLive();
-    });
-  }
 </script>
 
 <!-- (El modal de compra de monedas ha sido removido) -->
