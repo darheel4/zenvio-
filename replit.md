@@ -45,11 +45,12 @@ BeaBoo es una aplicación de redes sociales estilo Instagram/TikTok que permite 
 - Sistema de seguidores/seguidos
 
 ### Características Adicionales
-- Sistema de transmisiones en vivo
-- Regalos virtuales
+- Regalos virtuales (usado en comunidad)
 - Marcos animados para fotos de perfil
 - Sistema de notificaciones
 - Sistema de reportes
+
+**NOTA**: La funcionalidad de transmisiones en vivo ha sido completamente eliminada del proyecto (Noviembre 2025)
 
 ## Cambios Recientes (25 Oct 2025 - Actualización de Tarde)
 

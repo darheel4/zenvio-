@@ -178,247 +178,6 @@ body {
   border-bottom: 2px solid #FE2C55;
   margin: 20px 0;
 }
-
-/* Estilos para replicar la interfaz de TikTok Live (Inicio) */
-.live-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000;
-    font-family: sans-serif;
-    color: white;
-    overflow: hidden;
-}
-
-/* Placeholder de Video (Simulación de fondo) */
-.live-video-placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('https://via.placeholder.com/1080x1920/000000/FFFFFF?text=LIVE+STREAM+PLACEHOLDER'); /* Fondo negro o imagen de ejemplo */
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.8); /* Oscurecer un poco para que la UI resalte */
-}
-
-/* Capa de Interfaz (Overlay) */
-.live-ui-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px;
-    box-sizing: border-box;
-    z-index: 10;
-}
-
-/* --- SECCIÓN SUPERIOR --- */
-.ui-top-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.streamer-info {
-    display: flex;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 20px;
-    padding: 5px 10px 5px 5px;
-}
-
-.streamer-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-image: url('https://via.placeholder.com/30/FFFFFF/000000?text=A');
-    background-size: cover;
-    margin-right: 5px;
-}
-
-.streamer-details {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
-    margin-right: 10px;
-}
-
-.streamer-name {
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.live-status {
-    font-size: 10px;
-    color: #f0f0f0;
-}
-
-.follow-button {
-    background-color: #FE2C55; /* Rojo TikTok */
-    color: white;
-    border: none;
-    border-radius: 15px;
-    padding: 3px 8px;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.viewer-count {
-    background-color: rgba(0, 0, 0, 0.4);
-    color: white;
-    border-radius: 15px;
-    padding: 5px 10px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.ui-top-right {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    gap: 10px;
-}
-
-.share-button, .close-button {
-    background-color: rgba(0, 0, 0, 0.4);
-    color: white;
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    font-size: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-/* --- SECCIÓN INFERIOR --- */
-.ui-bottom {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-}
-
-/* Área de Comentarios/Chat */
-.chat-area {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    max-height: 30vh; /* Limitar altura para simular el scroll */
-    overflow-y: auto; /* Permitir scroll para los comentarios */
-    padding-left: 10px;
-    /* Estilo de scrollbar invisible para simular la app */
-    scrollbar-width: none; /* Firefox */
-}
-.chat-area::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-}
-
-.comment-bubble {
-    background-color: rgba(0, 0, 0, 0.3);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
-    width: fit-content;
-    max-width: 70%;
-    font-size: 14px;
-    backdrop-filter: blur(5px); /* Efecto de desenfoque sutil */
-}
-
-.comment-user {
-    font-weight: bold;
-    color: #FE2C55; /* Color de usuario similar a TikTok */
-    margin-right: 5px;
-}
-
-.gift-comment {
-    background-color: rgba(254, 44, 85, 0.5); /* Un color más distintivo para regalos */
-}
-
-/* Barra de Acción (Input y Botones) */
-.action-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 10px;
-}
-
-.input-container {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 25px;
-    padding: 5px;
-}
-
-.comment-input {
-    flex-grow: 1;
-    background: none;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    font-size: 14px;
-    outline: none;
-}
-
-.comment-input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.send-button {
-    background-color: #FE2C55;
-    color: white;
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    font-size: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-.gift-button, .like-button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-}
-
-/* --- ANIMACIÓN DE LIKES (Corazones Flotantes) --- */
-.like-animation-area {
-    position: absolute;
-    bottom: 60px; /* Encima de la barra de acción */
-    right: 10px;
-    width: 50px;
-    height: 200px;
-    pointer-events: none; /* Permite hacer clic a través */
-}
-
-/* Estilos para el icono de ojo (simulación de icono) */
-.icon-eye {
-    font-size: 14px;
-}
 /* Estilos para las estrellas seleccionadas */
 .star.selected {
   color: #FE2C55;
@@ -558,85 +317,6 @@ body {
 }
 
 /* ANIMACIÓN DE CARGA EN BÚSQUEDA - Movida a tiktok-loader.css */
-
-/* ANIMACIÓN PARA BORDE "LIVE" */
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(254, 44, 85, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(254, 44, 85, 0);
-  }
-  100% {
-
-function saveScheduledChapter(chapterId, publishDate) {
-  firebase.database().ref('scheduledChapters/' + chapterId).set({
-    publishDate: publishDate,
-    status: 'pending'
-  });
-}
-
-function checkScheduledChapters() {
-  const now = new Date().getTime();
-  firebase.database().ref('scheduledChapters').once('value', snapshot => {
-    snapshot.forEach(child => {
-      const scheduled = child.val();
-      if (scheduled.status === 'pending' && new Date(scheduled.publishDate).getTime() <= now) {
-        // Publicar el capítulo
-        firebase.database().ref('stories/' + currentEditingStory.id + '/chapters/' + child.key).update({
-          status: 'published'
-        });
-        // Actualizar estado del capítulo programado
-        child.ref.update({ status: 'published' });
-      }
-    });
-  });
-}
-
-// Verificar capítulos programados cada minuto
-setInterval(checkScheduledChapters, 60000);
-
-    box-shadow: 0 0 0 0 rgba(254, 44, 85, 0);
-  }
-}
-
-.live-border {
-  border: 4px solid #FE2C55;
-  border-radius: 50%;
-  position: relative;
-  animation: pulse 2s infinite;
-}
-
-.live-border::after {
-  content: "";
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  width: calc(100% + 8px);
-  height: calc(100% + 8px);
-  border: 2px solid #FE2C55;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-  pointer-events: none;
-}
-    /* ----------------- MODIFICACIONES AGREGADAS ----------------- */
-    /* Botón de iniciar transmisión en vivo: forma circular y sin texto */
-    #live-startBtn {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #00c6ba, #0082c6);
-      box-shadow: 0 4px 10px rgba(0, 198, 186, 0.4);
-    }
-
-    /* Ocultar la cruz en el transmisor (se mantiene oculta) */
-    #live-closeBtn {
-      display: none !important;
-      /* Asegura que no se muestre */
-    }
 
     /* Panel de estadísticas en edición */
     .stats-panel>div:not(:last-child) {
@@ -1040,215 +720,6 @@ setInterval(checkScheduledChapters, 60000);
       align-items: center;
       justify-content: center;
       z-index: 10000;
-    }
-
-    /* VISTA LIVE (iQiyi Style) */
-    :root {
-      --iqiyi-teal: #00C6B9;
-      --iqiyi-blue: #2C7DFA;
-      --iqiyi-purple: #7659FF;
-      --iqiyi-pink: #FF57A8;
-    }
-
-    .live-container {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      background-color: #f9fafb;
-      overflow: hidden;
-    }
-
-    .top-bar {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, transparent 100%);
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      color: #374151;
-    }
-
-    .user-profile {
-      display: flex;
-      align-items: center;
-      background-color: var(--iqiyi-teal);
-      padding: 0.5rem 1rem;
-      border-radius: 12px;
-      gap: 0.5rem;
-      color: white;
-      font-weight: bold;
-    }
-
-    .viewer-count {
-      background-color: var(--iqiyi-blue);
-      padding: 0.5rem 1rem;
-      border-radius: 12px;
-      color: white;
-      font-weight: bold;
-    }
-
-    .side-buttons {
-      position: absolute;
-      right: 1rem;
-      bottom: 100px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    .side-button {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #374151;
-      gap: 0.5rem;
-      font-weight: 500;
-    }
-
-    /* En la vista del transmisor se ocultan los botones laterales y el contenedor de comentarios */
-    #live-stream-modal .side-buttons,
-    #live-stream-modal #broadcasterCommentsContainer,
-    #live-stream-modal #live-indicator {
-      display: none !important;
-    }
-
-    /* Se mantiene la eliminación de la bottom-bar (no hay input de comentarios) */
-    .bottom-bar {
-      display: none;
-    }
-
-    /* Botones laterales (teal, purple, pink) para la vista de espectador */
-    .icon-button {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .icon-button:hover {
-      transform: scale(1.1);
-    }
-
-    /* Botón teal: Heart */
-    #heartButton,
-    #heartButtonViewer {
-      background-color: var(--iqiyi-teal);
-    }
-
-    #heartButton img,
-    #heartButtonViewer img {
-      width: 24px;
-      height: 24px;
-    }
-
-    /* Botón purple: Gift */
-    #giftButton,
-    #giftButtonViewer {
-      background-color: var(--iqiyi-purple);
-    }
-
-    #giftButton img,
-    #giftButtonViewer img {
-      width: 24px;
-      height: 24px;
-    }
-
-    /* Botón pink: Share */
-    #shareButton,
-    #shareButtonViewer {
-      background-color: var(--iqiyi-pink);
-    }
-
-    /* Animación de corazones */
-    .floating-heart {
-      position: absolute;
-      animation: float-up 1.5s ease-out forwards;
-      opacity: 0;
-      width: 24px;
-      height: 24px;
-    }
-
-    @keyframes float-up {
-      0% {
-        transform: translateY(0) scale(1) rotate(0deg);
-        opacity: 1;
-      }
-
-      100% {
-        transform: translateY(-100px) scale(0) rotate(45deg);
-        opacity: 0;
-      }
-    }
-
-    .comments-container {
-      position: absolute;
-      bottom: 80px;
-      left: 0;
-      right: 0;
-      padding: 1rem;
-      pointer-events: none;
-    }
-
-    .comment-bubble {
-      background-color: var(--duolingo-green);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      margin-bottom: 0.5rem;
-      max-width: 80%;
-      animation: fade-in-out 3s forwards;
-      font-weight: bold;
-    }
-
-    @keyframes fade-in-out {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      10% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      90% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      100% {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-    }
-
-    /* Contenedor para comentarios del transmisor (se oculta en este caso) */
-    #broadcasterCommentsContainer {
-      position: absolute;
-      bottom: 80px;
-      left: 0;
-      right: 0;
-      padding: 1rem;
-      max-height: 40%;
-      overflow-y: auto;
-      background: rgba(0, 0, 0, 0.4);
-      color: #111;
-      z-index: 101;
     }
 
     /* ---------- NUEVA SECCIÓN: Estilos para Computadora ---------- */
@@ -1988,12 +1459,6 @@ setInterval(checkScheduledChapters, 60000);
           <line x1="3" y1="10" x2="21" y2="10" />
         </svg>
       </button>
-      <button onclick="openLiveStreamModal()" aria-label="Transmitir en vivo" class="relative w-6 h-6 text-[#161823] hover:text-[#FE2C55] transition">
-        <svg class="w-full h-full" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M23 7l-7 5 7 5V7z"/>
-          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-        </svg>
-      </button>
       <button onclick="openMessages()" aria-label="Mensajes" class="relative w-6 h-6 text-[#161823] hover:text-[#FE2C55] transition">
         <svg class="w-full h-full" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke-linecap="round" stroke-linejoin="round" />
@@ -2320,29 +1785,6 @@ firebase.auth().onAuthStateChanged(user => {
                 <div class="flex-1 min-w-0">
                   <h3 class="text-xl font-bold mb-2 text-black">Crear Nota</h3>
                   <p class="text-gray-600 mb-3">Comparte pensamientos e imágenes con la comunidad</p>
-                  <div class="flex items-center text-[#FE2C55] group-hover:text-[#ef2950] transition-colors">
-                    <span class="font-medium mr-2">Comenzar</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Transmitir en Vivo -->
-          <div onclick="openLiveStreamModal()" class="group cursor-pointer">
-            <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-[#FE2C55]">
-              <div class="flex items-center">
-                <div class="w-16 h-16 mr-4 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <h3 class="text-xl font-bold mb-2 text-black">Transmitir en Vivo</h3>
-                  <p class="text-gray-600 mb-3">Conecta con tu audiencia en tiempo real</p>
                   <div class="flex items-center text-[#FE2C55] group-hover:text-[#ef2950] transition-colors">
                     <span class="font-medium mr-2">Comenzar</span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -3163,12 +2605,6 @@ document.addEventListener('DOMContentLoaded', function() {
           Los efectos y marcos están disponibles en tu perfil
         </p>
       </div>
-      <button id="live-transmit-btn" onclick="openLiveStreamModal()" class="mt-4 w-full bg-[#FE2C55] text-white p-3 rounded-lg flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-        </svg>
-        Transmitir en vivo
-      </button>
     </div>
   </div>
 
@@ -3416,15 +2852,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
           </div>
 
-          <!-- Botones adicionales -->
-          <div class="w-full mt-6 space-y-3">
-            <button onclick="openLiveStreamModal()" class="w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-              </svg>
-              Transmitir en vivo
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -4200,13 +3627,41 @@ function saveNote() {
   </div>
 </div>
 
+<script>
+  // Scheduled chapters functionality
+function saveScheduledChapter(chapterId, publishDate) {
+  firebase.database().ref('scheduledChapters/' + chapterId).set({
+    publishDate: publishDate,
+    status: 'pending'
+  });
+}
 
+function checkScheduledChapters() {
+  const now = new Date().getTime();
+  firebase.database().ref('scheduledChapters').once('value', snapshot => {
+    snapshot.forEach(child => {
+      const scheduled = child.val();
+      if (scheduled.status === 'pending' && new Date(scheduled.publishDate).getTime() <= now) {
+        // Publicar el capítulo
+        firebase.database().ref('stories/' + currentEditingStory.id + '/chapters/' + child.key).update({
+          status: 'published'
+        });
+        // Actualizar estado del capítulo programado
+        child.ref.update({ status: 'published' });
+      }
+    });
+  });
+}
 
+// Verificar capítulos programados cada minuto
+setInterval(checkScheduledChapters, 60000);
+</script>
 
 <!--
-  Código Completo de Transmisión en Vivo (Transmisor y Espectador)
-  ----------------------------------------------------------------------------
-  Funcionalidades:
+  NOTE: Live streaming functionality has been removed from this application.
+  All live stream modals, styles, and JavaScript functions below this point are deprecated
+  and should be ignored or removed in future updates.
+-->
     • Vista de transmisión en vivo para el transmisor y el espectador.
     • Panel de ajustes del transmisor se muestra a pantalla completa.
          - Opciones: Notificaciones, Mostrar estado, Comentarios, Filtro de contenido.
